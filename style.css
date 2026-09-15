@@ -18,7 +18,7 @@ body {
 }
 
 /* ==========================================
-   1. ヒーローセクション（追従・スムーズ浮遊エリア）
+   1. ヒーローセクション（カクつき完全防止）
    ========================================== */
 .hero-section {
     width: 100vw;
@@ -26,6 +26,7 @@ body {
     position: relative;
     overflow: hidden;
     cursor: crosshair;
+    /* タッチ操作での縦スクロール揺れをブロックし、没入感を高める */
     touch-action: none; 
     background-color: #ffffff;
 }
@@ -60,14 +61,14 @@ body {
     pointer-events: none;
     will-change: transform, opacity;
     
-    /* 消える時のフェードアウト設定 */
+    /* 消去時のフェードアウト設定 */
     transition: opacity 0.8s ease, transform 0.8s ease;
     
-    /* ★出現とふわふわ浮遊を1つのアニメーションに統合（カクつき防止） */
+    /* 連続的なふわふわ浮遊アニメーション */
     animation: smooth-float 4s ease-in-out infinite;
 }
 
-/* ★途切れや跳ねなく、ゆっくりと出現して浮遊する連続アニメーション */
+/* カクつきを排除した浮遊アニメーション */
 @keyframes smooth-float {
     0% {
         opacity: 0;
@@ -89,25 +90,61 @@ body {
     }
 }
 
-/* 削除時のフェードアウトスタイル */
+/* 古い画像消去時のフェードアウトクラス */
 .trail-image.is-fading {
     opacity: 0 !important;
     transform: translate(-50%, -50%) scale(0.8) !important;
 }
 
-.scroll-hint {
+/* 下部自動スクロールボタン */
+.scroll-btn {
     position: absolute;
-    bottom: 25px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 11px;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    pointer-events: auto; 
+}
+
+.scroll-btn span {
+    font-size: 10px;
     letter-spacing: 2px;
-    color: #888888;
-    pointer-events: none;
+    color: #333333;
+    font-weight: 600;
+}
+
+.scroll-btn .arrow {
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid #333;
+    border-bottom: 1.5px solid #333;
+    transform: rotate(45deg);
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); }
+    50% { transform: rotate(45deg) translate(2px, 2px); }
+}
+
+.scroll-btn:active {
+    transform: translateX(-50%) scale(0.95);
+    background: #ffffff;
 }
 
 /* ==========================================
-   2. メッセージセクション（背景：#FCF36A）
+   2. メッセージセクション
    ========================================== */
 .message-section {
     width: 100%;

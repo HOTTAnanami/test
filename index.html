@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursor Trail Image Animation</title>
+    <title>Design Studio - Interactive Hero</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. マウス/指の追従エリア -->
+    <!-- 1. メインビジュアルエリア（なぞり・浮遊エリア） -->
     <section id="hero-area" class="hero-section">
         <div class="lead-text">Cursor or Drag around here</div>
-        <!-- 画像が出現するコンテナ -->
         <div id="trail-container"></div>
-        <div class="scroll-hint">SCROLL DOWN</div>
+        
+        <!-- 自動スクロールボタン -->
+        <button id="scroll-btn" class="scroll-btn" aria-label="Scroll Down">
+            <span>SCROLL DOWN</span>
+            <div class="arrow"></div>
+        </button>
     </section>
 
-    <!-- 2. 下にスクロールすると登場するメッセージエリア -->
+    <!-- 2. メッセージセクション（スクロール後に背景が#FCF36Aへ変化） -->
     <section class="message-section">
         <div class="message-inner">
             <span class="sub-title">OUR PHILOSOPHY</span>
