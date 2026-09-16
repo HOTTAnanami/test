@@ -27,7 +27,7 @@ body {
     overflow: hidden;
     cursor: crosshair;
     /* タッチ操作での縦スクロール揺れをブロックし、没入感を高める */
-    touch-action: none; 
+    touch-action: none;
     background-color: #ffffff;
 }
 
@@ -60,10 +60,10 @@ body {
     object-fit: contain;
     pointer-events: none;
     will-change: transform, opacity;
-    
+
     /* 消去時のフェードアウト設定 */
     transition: opacity 0.8s ease, transform 0.8s ease;
-    
+
     /* 連続的なふわふわ浮遊アニメーション */
     animation: smooth-float 4s ease-in-out infinite;
 }
@@ -105,23 +105,24 @@ body {
     z-index: 20;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: none;
+    background: none;
     padding: 12px 24px;
     border-radius: 30px;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
+
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     transition: transform 0.2s ease, background-color 0.2s ease;
-    pointer-events: auto; 
+    pointer-events: auto;
 }
 
 .scroll-btn span {
-    font-size: 10px;
-    letter-spacing: 2px;
+    font-size: 20px;
+    letter-spacing: 1px;
     color: #333333;
-    font-weight: 600;
+    font-weight: 100;
 }
 
 .scroll-btn .arrow {
@@ -132,6 +133,7 @@ body {
     transform: rotate(45deg);
     animation: bounce 1.5s infinite;
 }
+
 
 @keyframes bounce {
     0%, 100% { transform: rotate(45deg) translate(0, 0); }
