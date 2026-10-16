@@ -705,7 +705,7 @@ input[type="checkbox"]:checked::after {
     .big-menu-link {
         font-family: var(--font-en);
         font-size: 30px;
-        font-weight: 300;
+        font-weight: 100;
         color: var(--color-main);
         text-decoration: none;
         letter-spacing: 0.04em;
@@ -968,7 +968,7 @@ input[type="checkbox"]:checked::after {
         z-index: 1500;
         display: flex;
         align-items: flex-start;
-        padding: 0 clamp(30px, 8vw, 40px) clamp(30px, 8vw, 40px) clamp(30px, 8vw, 40px);
+        padding: 0 clamp(30px, 8vw, 100px) clamp(30px, 8vw, 40px) clamp(30px, 8vw, 100px);
         opacity: 0;
         visibility: hidden;
         overflow: hidden;
@@ -1004,7 +1004,7 @@ input[type="checkbox"]:checked::after {
     .big-menu-link {
         font-family: var(--font-en);
         font-size: clamp(50px, 7vh, 72px);
-        font-weight: 300;
+        font-weight: 100;
         color: var(--color-main);
         text-decoration: none;
         letter-spacing: 0.04em;
