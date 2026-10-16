@@ -760,7 +760,7 @@ input[type="checkbox"]:checked::after {
 }
 
 /* ==========================================================================
-   レスポンシブ (スマホ: 1023px以下) - SP版専用にレイアウト・上から順番の積み上げを最適化
+   レスポンシブ (スマホ: 1023px以下) - フォント保証・積み上げ＆余効調整版
    ========================================================================== */
 @media (max-width: 1023px) {
     .contact-header-line {
@@ -777,6 +777,7 @@ input[type="checkbox"]:checked::after {
         display: inline;
     }
 
+    /* スマホ版ビッグメニュー：背景黄色を全画面維持、上から順に積み上げ */
     .big-menu {
         padding: 40px 24px 30px 24px;
         align-items: flex-start;
@@ -789,26 +790,29 @@ input[type="checkbox"]:checked::after {
         min-height: 100%;
     }
 
+    /* HOMEの上の余白をさらに広げるゆとりを確保 */
     .big-menu-nav {
-        margin-top: 60px;
-        margin-bottom: 24px;
+        margin-top: 85px;
+        margin-bottom: 20px;
     }
 
     .big-menu-nav ul {
-        gap: 24px;
+        gap: 20px;
     }
 
     .big-menu-link {
+        font-family: var(--font-en); /* フォント確実に適用 */
         font-size: 30px;
         font-weight: 300;
     }
 
+    /* CONTACTと名前部分の余白を詰める、上から順の積み上げ設定 */
     .big-menu-footer {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 14px;
         padding-bottom: 20px;
-        margin-top: 30px;
+        margin-top: 15px; /* 余白を詰めてコンパクトに */
     }
 
     .big-menu-credits {
@@ -818,10 +822,12 @@ input[type="checkbox"]:checked::after {
         width: 100%;
     }
 
+    /* クレジット行（名前とアイコンの始点を綺麗に縦揃え） */
     .credit-item {
         display: flex;
         align-items: center;
         gap: 1px;
+        font-family: var(--font-en); /* フォント確実に適用 */
         font-size: 15px;
         font-weight: 400;
         width: 100%;
@@ -846,15 +852,16 @@ input[type="checkbox"]:checked::after {
         width: 17px;
     }
 
+    /* ロゴを右揃えで下に配置（積み上げ式） */
     .big-menu-logo {
         width: 100%;
         display: flex;
         justify-content: flex-end;
-        margin-top: 40px;
+        margin-top: 15px;
     }
 
     .big-logo-img {
-        width: 160px;
+        width: 150px;
     }
 }
 
