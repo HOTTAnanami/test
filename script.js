@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             createTrailImage(e.clientX, e.clientY);
         });
 
+        // スマホでのドラッグ/スワイプ時に、画面の意図しないスクロールダウンを防ぐ
         fvSection.addEventListener("touchmove", (e) => {
             const touch = e.touches[0];
             createTrailImage(touch.clientX, touch.clientY);
@@ -115,8 +116,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const scrollBtn = document.getElementById("scroll-btn");
     const heroSection = document.getElementById("hero");
 
+    let isUnlocked = false; // スクロールダウンボタンが押されたかどうか
+
     if (scrollBtn && heroSection) {
         scrollBtn.addEventListener("click", () => {
+            isUnlocked = true; // ロックを解除
             heroSection.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
@@ -124,10 +128,55 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // ファーストビュー表示中で、ボタンがまだ押されていない時は下に抜けるスクロールをブロックする
+    window.addEventListener("wheel", (e) => {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+
+        if (!isUnlocked && scrollY < windowHeight / 2 && e.deltaY > 0) {
+            e.preventDefault(); // 下方向へのスクロールを無効化
+        } else if (scrollY < windowHeight / 2 && e.deltaY > 0 && !window.isAnimating) {
+            e.preventDefault();
+            window.isAnimating = true;
+
+            if (heroSection) {
+                heroSection.scrollIntoView({ behavior: "smooth" });
+            }
+
+            setTimeout(() => {
+                window.isAnimating = false;
+            }, 800);
+        }
+    }, { passive: false });
+
+    // タッチデバイス（SP版）でのスワイプによる自動スクロールを防ぐ制御
+    let touchStartY = 0;
+    if (fvSection) {
+        fvSection.addEventListener("touchstart", (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        fvSection.addEventListener("touchmove", (e) => {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const currentY = e.touches[0].clientY;
+            const deltaY = touchStartY - currentY; // 上方向へスワイプ（下へスクロールしようとする動き）
+
+            if (!isUnlocked && scrollY < windowHeight / 2 && deltaY > 10) {
+                e.preventDefault(); // ボタンが押されるまではスワイプダウンによる次セクション移動をブロック
+            }
+        }, { passive: false });
+    }
+
     let lastScrollY = window.scrollY;
     window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
         const windowHeight = window.innerHeight;
+
+        // ヒーローセクション以降に達したらロックフラグをリセット等必要に応じて
+        if (currentScrollY >= windowHeight * 0.5) {
+            isUnlocked = true;
+        }
 
         if (currentScrollY > windowHeight * 0.5) {
             if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -152,24 +201,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         lastScrollY = currentScrollY;
     });
-
-    window.addEventListener("wheel", (e) => {
-        const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-
-        if (scrollY < windowHeight / 2 && e.deltaY > 0 && !window.isAnimating) {
-            e.preventDefault();
-            window.isAnimating = true;
-
-            if (heroSection) {
-                heroSection.scrollIntoView({ behavior: "smooth" });
-            }
-
-            setTimeout(() => {
-                window.isAnimating = false;
-            }, 800);
-        }
-    }, { passive: false });
 
     const sections = document.querySelectorAll(".section");
     const observerOptions = {

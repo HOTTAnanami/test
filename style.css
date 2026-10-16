@@ -111,126 +111,6 @@ body:has(.big-menu.is-active) .global-header {
 }
 
 /* --------------------------------------------------------------------------
-   ビッグメニュー（PC版基本デザイン）
-   -------------------------------------------------------------------------- */
-.big-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #FFF56E;
-    z-index: 1500;
-    display: flex;
-    align-items: center;
-    padding: 60px 100px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.big-menu.is-active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.big-menu-inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-}
-
-.big-menu-nav {
-    margin-top: 60px;
-}
-
-.big-menu-nav ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.big-menu-link {
-    font-family: var(--font-en);
-    font-size: 60px;
-    font-weight: 300;
-    color: var(--color-main);
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    display: inline-block;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.big-menu-link:hover {
-    opacity: 0.6;
-    transform: translateX(10px);
-}
-
-.big-menu-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 100%;
-    padding-bottom: 20px;
-}
-
-.big-menu-credits {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-}
-
-.credit-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--font-en);
-    font-size: 17px;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-}
-
-.icon-circle-group {
-    display: flex;
-    gap: 8px;
-}
-
-.icon-circle {
-    width: 38px;
-    height: 38px;
-    border: 1px solid var(--color-main);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s ease;
-}
-
-.icon-circle:hover {
-    opacity: 0.6;
-}
-
-.icon-circle img {
-    width: 18px;
-    height: auto;
-    display: block;
-}
-
-.big-menu-logo {
-    pointer-events: none;
-}
-
-.big-logo-img {
-    width: 230px; 
-    height: auto;
-    display: block;
-}
-
-/* --------------------------------------------------------------------------
    各セクション・共通パーツ
    -------------------------------------------------------------------------- */
 .fv-section {
@@ -760,7 +640,7 @@ input[type="checkbox"]:checked::after {
 }
 
 /* ==========================================================================
-   レスポンシブ (スマホ: 1023px以下) - フォント保証・積み上げ＆余効調整版
+   レスポンシブ (スマホ: 1023px以下)
    ========================================================================== */
 @media (max-width: 1023px) {
     .contact-header-line {
@@ -777,57 +657,84 @@ input[type="checkbox"]:checked::after {
         display: inline;
     }
 
-    /* スマホ版ビッグメニュー：背景黄色を全画面維持、上から順に積み上げ */
     .big-menu {
-        padding: 40px 24px 30px 24px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #FFF56E;
+        z-index: 1500;
+        display: flex;
         align-items: flex-start;
+        padding: 40px 24px 40px 24px; /* 下部のパディングを確保して背景が途切れないように調整 */
+        opacity: 0;
+        visibility: hidden;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .big-menu.is-active {
+        opacity: 1;
+        visibility: visible;
     }
 
     .big-menu-inner {
-        justify-content: flex-start;
+        width: 100%;
         height: auto;
         min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
     }
 
-    /* HOMEの上の余白をさらに広げるゆとりを確保 */
     .big-menu-nav {
         margin-top: 85px;
         margin-bottom: 20px;
     }
 
     .big-menu-nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
         gap: 20px;
     }
 
     .big-menu-link {
-        font-family: var(--font-en); /* フォント確実に適用 */
+        font-family: var(--font-en);
         font-size: 30px;
         font-weight: 300;
+        color: var(--color-main);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        display: inline-block;
     }
 
-    /* CONTACTと名前部分の余白を詰める、上から順の積み上げ設定 */
     .big-menu-footer {
+        display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
-        padding-bottom: 20px;
-        margin-top: 15px; /* 余白を詰めてコンパクトに */
+        padding-bottom: 20px; /* 余白を確保して最下部まで黄色が覆うようにする */
+        margin-top: 15px;
+        width: 100%;
     }
 
     .big-menu-credits {
+        display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
         width: 100%;
     }
 
-    /* クレジット行（名前とアイコンの始点を綺麗に縦揃え） */
     .credit-item {
         display: flex;
         align-items: center;
         gap: 1px;
-        font-family: var(--font-en); /* フォント確実に適用 */
+        font-family: var(--font-en);
         font-size: 15px;
         font-weight: 400;
         width: 100%;
@@ -846,27 +753,36 @@ input[type="checkbox"]:checked::after {
     .icon-circle {
         width: 34px;
         height: 34px;
+        border: 1px solid var(--color-main);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .icon-circle img {
         width: 17px;
+        height: auto;
+        display: block;
     }
 
-    /* ロゴを右揃えで下に配置（積み上げ式） */
     .big-menu-logo {
         width: 100%;
         display: flex;
         justify-content: flex-end;
         margin-top: 15px;
+        pointer-events: none;
     }
 
     .big-logo-img {
         width: 150px;
+        height: auto;
+        display: block;
     }
 }
 
 /* ==========================================================================
-   レスポンシブ (PC: 1024px以上) - PC版のデザインを完全維持
+   レスポンシブ (PC: 1024px以上)
    ========================================================================== */
 @media (min-width: 1024px) {
     .scroll-btn {
@@ -1039,5 +955,125 @@ input[type="checkbox"]:checked::after {
         font-size: 20px;
         font-weight: 100;
         padding: 20px 40px;
+    }
+
+    /* PC版ビッグメニュー：全体を下に寄せ、下部余白40px・フォントサイズ調整版 */
+    .big-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #FFF56E;
+        z-index: 1500;
+        display: flex;
+        align-items: flex-start;
+        padding: 0 clamp(40px, 8vw, 100px) 40px clamp(40px, 8vw, 100px);
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .big-menu.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .big-menu-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: relative;
+    }
+
+    .big-menu-nav {
+        margin-top: clamp(10px, auto, 70px);
+        margin-bottom: clamp(20px, 2vh, 35px);
+    }
+
+    .big-menu-nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(12px, 1.2vh, 22px);
+    }
+
+    .big-menu-link {
+        font-family: var(--font-en);
+        font-size: clamp(42px, 5.2vh, 68px);
+        font-weight: 300;
+        color: var(--color-main);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        display: inline-block;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .big-menu-link:hover {
+        opacity: 0.6;
+        transform: translateX(10px);
+    }
+
+    .big-menu-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        padding-bottom: 0;
+    }
+
+    .big-menu-credits {
+        display: flex;
+        gap: clamp(20px, 4vw, 40px);
+        align-items: center;
+    }
+
+    .credit-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-en);
+        font-size: clamp(14px, 1.5vh, 18px);
+        font-weight: 400;
+        letter-spacing: 0.04em;
+    }
+
+    .icon-circle-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .icon-circle {
+        width: clamp(32px, 3.5vh, 40px);
+        height: clamp(32px, 3.5vh, 40px);
+        border: 1px solid var(--color-main);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s ease;
+    }
+
+    .icon-circle:hover {
+        opacity: 0.6;
+    }
+
+    .icon-circle img {
+        width: clamp(14px, 1.5vh, 19px);
+        height: auto;
+        display: block;
+    }
+
+    .big-menu-logo {
+        pointer-events: none;
+    }
+
+    .big-logo-img {
+        width: clamp(210px, 18vw, 280px); 
+        height: auto;
+        display: block;
     }
 }
