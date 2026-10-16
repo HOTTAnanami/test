@@ -3,39 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Studio - Interactive Hero</title>
+    <title>HIATARI</title>
+    <!-- Google Fonts: Zen Kaku Gothic New & Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;&family=Zen+Kaku+Gothic+New:wght@300;400;500;&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- EmailJS SDKの読み込み -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("YOUR_PUBLIC_KEY");
+       })();
+    </script>
 </head>
 <body>
 
-    <!-- 1. メインビジュアルエリア（なぞり・浮遊エリア） -->
-    <section id="hero-area" class="hero-section">
-        <div class="lead-text">Drag here</div>
-        <div id="trail-container"></div>
-        
-        <!-- 自動スクロールボタン -->
+    <!-- 共通ヘッダー・メニューの読み込み位置 -->
+    <div id="header-include"></div>
+
+    <!-- 1. ファーストビューセクション -->
+    <section id="fv" class="section fv-section" data-bg="#FFFFFF">
+        <div class="intro-logo-wrap" id="intro-logo">
+            <img src="img/logo.svg" alt="HIATARI" class="intro-logo-img">
+        </div>
+        <div id="image-container"></div>
+
         <button id="scroll-btn" class="scroll-btn" aria-label="Scroll Down">
             <span>SCROLL DOWN</span>
-            <div class="arrow"></div>
+            <img src="img/arrow-down.svg" alt="" class="arrow-svg">
         </button>
     </section>
 
-    <!-- 2. メッセージセクション（スクロール後に背景が#FCF36Aへ変化） -->
-    <section class="message-section">
-        <div class="message-inner">
-            <span class="sub-title">OUR PHILOSOPHY</span>
-            <h2 class="main-title">形なき想いに、<br>情緒と色彩を。</h2>
-            <p class="description">
-                私たちは、視覚表現の可能性を追求するデザインスタジオです。<br>
-                グラフィック、Web、プロダクトの垣根を越え、記憶に残り続けるノイズのない美しい体験を創造します。<br>
-                変化し続ける時代の中で、変わらない美しさと確かな想いを社会へ届けていきます。
+    <!-- 2. ヒーローセクション -->
+    <section id="hero" class="section hero-section" data-bg="#FFF56E">
+        <div class="container">
+            <div class="hero-content">
+                <h2>これから輝く原石に、<br>ぴったりの光をあてる。</h2>
+                
+                <p class="text-pc">
+                    まだ言葉になっていない価値を見つけ、整理し、届ける。<br>
+                    人や地域、企業や商品の中には、魅力や可能性が十分にある。<br>
+                    日當リは、企画・編集・デザイン・撮影を横断しながら、<br>
+                    本質的なアウトプットを届け、「らしさ」をつくります。
+                </p>
+
+                <p class="text-sp">
+                    まだ言葉になっていない価値を見つけ、<br>
+                    整理し、届ける。<br>
+                    人や地域、企業や商品の中には、魅力や<br>
+                    可能性が十分にある。<br>
+                    日當リは、企画・編集・デザイン・撮影<br>
+                    を横断しながら、本質的なアウトプット<br>
+                    を届け、「らしさ」をつくります。
+                </p>
+            </div>
+
+            <nav class="nav-grid">
+                <a href="#about" class="nav-item item-about">
+                    <div class="nav-text-wrap">
+                        <span class="nav-title">ABOUT US</span>
+                        <span class="nav-sub">つくる前に、観察する</span>
+                    </div>
+                    <img src="img/arrow-right.svg" alt="" class="arrow">
+                </a>
+                <a href="#service" class="nav-item item-service">
+                    <div class="nav-text-wrap">
+                        <span class="nav-title">SERVICE & FLOW</span>
+                        <span class="nav-sub">編集からはじまるものづくり</span>
+                    </div>
+                    <img src="img/arrow-right.svg" alt="" class="arrow">
+                </a>
+                <a href="#recruit" class="nav-item item-recruit">
+                    <div class="nav-text-wrap">
+                        <span class="nav-title">RECRUIT</span>
+                        <span class="nav-sub">観察できる人</span>
+                    </div>
+                    <img src="img/arrow-right.svg" alt="" class="arrow">
+                </a>
+                <div class="nav-item item-empty"></div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- 3. ワークスセクション -->
+    <section id="works" class="section works-section" data-bg="#E5E5E5">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-main-title">WORKS</h2>
+                <a href="#all-works" class="all-works">ALL WORKS <img src="img/arrow-right.svg" alt="" class="arrow"></a>
+            </div>
+            <p class="works-desc">
+                地域、企業、商品、人。<br>
+                それぞれにある価値を見つめ、整理し、届けるべき形へ編集してきました。<br><br>
+                商品開発、パッケージ、ブランド設計、写真撮影、編集、企画づくりなど、<br>
+                領域を横断しながら、その場に必要な形を一緒をつくっています。
             </p>
-            <div class="company-info">
-                <p><strong>AURA DESIGN INC.</strong></p>
-                <p>Tokyo / Kyoto / Online</p>
+
+            <div class="works-list">
+                <article class="work-item">
+                    <div class="work-info">
+                        <a href="work-detail-01.html" class="work-link-title">
+                            <h3>嬉野西洋野菜図鑑</h3>
+                        </a>
+                        <a href="work-detail-01.html" class="work-link-sub">
+                            <p class="work-category">冊子制作</p>
+                        </a>
+                        <div class="work-tags">
+                            <a href="#">Graphic Design</a>
+                            <a href="#">Book Design</a>
+                            <a href="#">Illustration</a>
+                            <a href="#">Editorial Design</a>
+                        </div>
+                    </div>
+                    <div class="work-img">
+                        <a href="work-detail-01.html" class="work-link-img">
+                            <div class="work-img-wrap">
+                                <img src="img/work-01.jpg" alt="嬉野西洋野菜図鑑" class="work-thumb">
+                            </div>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="work-item">
+                    <div class="work-info">
+                        <a href="work-detail-02.html" class="work-link-title">
+                            <h3>うれしのしおた暮らし観光マップ</h3>
+                        </a>
+                        <a href="work-detail-02.html" class="work-link-sub">
+                            <p class="work-category">地域観光マップ制作</p>
+                        </a>
+                        <div class="work-tags">
+                            <a href="#">Graphic Design</a>
+                            <a href="#">Book Design</a>
+                            <a href="#">Illustration</a>
+                            <a href="#">Editorial Design</a>
+                        </div>
+                    </div>
+                    <div class="work-img">
+                        <a href="work-detail-02.html" class="work-link-img">
+                            <div class="work-img-wrap">
+                                <img src="img/work-02.jpg" alt="うれしのしおた暮らし観光マップ" class="work-thumb">
+                            </div>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="work-item">
+                    <div class="work-info">
+                        <a href="work-detail-03.html" class="work-link-title">
+                            <h3>SAGA BALLOON CHALLENGE SERIES</h3>
+                        </a>
+                        <a href="work-detail-03.html" class="work-link-sub">
+                            <p class="work-category">イベントビジュアル制作</p>
+                        </a>
+                        <div class="work-tags">
+                            <a href="#">Graphic Design</a>
+                            <a href="#">Poster Design</a>
+                            <a href="#">Branding</a>
+                            <a href="#">Event Promotion</a>
+                        </div>
+                    </div>
+                    <div class="work-img">
+                        <a href="work-detail-03.html" class="work-link-img">
+                            <div class="work-img-wrap">
+                                <img src="img/work-03.jpg" alt="SAGA BALLOON CHALLENGE SERIES" class="work-thumb">
+                            </div>
+                        </a>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
+
+    <!-- 4. コンタクトセクション -->
+    <section id="contact" class="section contact-section" data-bg="#FFFFFF">
+        <div class="container">
+            <div class="section-header contact-header-group">
+                <h2 class="section-main-title">CONTACT</h2>
+                <div class="contact-sub-header">
+                    <p class="contact-desc">まずは、今の困りごとからお聞かせください</p>
+                    <div class="contact-header-line"></div>
+                </div>
+            </div>
+
+            <form class="contact-form" id="contact-form">
+                <div class="form-row">
+                    <label class="form-label"><span class="badge required">必須</span> お名前</label>
+                    <div class="form-input-wrap">
+                        <input type="text" name="user_name" id="field-name" class="required-input" placeholder="山田 太郎">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label"><span class="badge required">必須</span> 会社名</label>
+                    <div class="form-input-wrap">
+                        <input type="text" name="company_name" id="field-kana" class="required-input" placeholder="HIATARI Inc.">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label"><span class="badge required">必須</span> メールアドレス</label>
+                    <div class="form-input-wrap">
+                        <input type="email" name="user_email" id="field-email" class="required-input" placeholder="info@example.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label"><span class="badge required">必須</span> 電話番号</label>
+                    <div class="form-input-wrap">
+                        <input type="tel" name="user_tel" id="field-tel" class="required-input" placeholder="090-0000-0000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">
+                        <span class="badge required">必須</span> 
+                        <span class="label-text-group">困っていることは？ <span class="note">(複数回答可)</span></span>
+                    </label>
+                    <div class="form-input-wrap">
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="troubles" value="写真やデザインをまとめて相談したい" class="req-checkbox"> 写真やデザインをまとめて相談したい</label>
+                            <label><input type="checkbox" name="troubles" value="ブランドの軸が曖昧なまま進んでいる" class="req-checkbox"> ブランドの軸が曖昧なまま進んでいる</label>
+                            <label><input type="checkbox" name="troubles" value="地域の魅力を形にしたい" class="req-checkbox"> 地域の魅力を形にしたい</label>
+                            <label><input type="checkbox" name="troubles" value="商品の魅力がうまく伝わらない" class="req-checkbox"> 商品の魅力がうまく伝わらない</label>
+                            <label><input type="checkbox" name="troubles" value="何から整理すればいいかわからない" class="req-checkbox"> 何から整理すればいいかわからない</label>
+                            <label><input type="checkbox" name="troubles" value="その他" class="req-checkbox toggle-trigger" data-target="textarea-1"> その他</label>
+                        </div>
+                        <div class="sub-textarea-wrap" id="textarea-1" style="display: none;">
+                            <textarea name="troubles_other" rows="3" placeholder="その他の内容をご記入ください"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">
+                        <span class="label-text-group">希望する制作物 <span class="note">(複数回答可)</span></span>
+                    </label>
+                    <div class="form-input-wrap">
+                        <div class="checkbox-group inline-wrap">
+                            <label><input type="checkbox" name="requests" value="ブランディング"> ブランディング</label>
+                            <label><input type="checkbox" name="requests" value="企画・編集"> 企画・編集</label>
+                            <label><input type="checkbox" name="requests" value="写真・映像"> 写真・映像</label>
+                            <label><input type="checkbox" name="requests" value="商品開発"> 商品開発</label>
+                            <label><input type="checkbox" name="requests" value="ロゴデザイン"> ロゴデザイン</label>
+                            <label><input type="checkbox" name="requests" value="商品パッケージ"> 商品パッケージ</label>
+                            <label><input type="checkbox" name="requests" value="印刷物"> 印刷物</label>
+                            <label><input type="checkbox" name="requests" value="イラスト"> イラスト</label>
+                            <label><input type="checkbox" name="requests" value="Webサイト"> Webサイト</label>
+                            <label><input type="checkbox" name="requests" value="その他" class="toggle-trigger" data-target="textarea-2"> その他</label>
+                        </div>
+                        <div class="sub-textarea-wrap" id="textarea-2" style="display: none;">
+                            <textarea name="requests_other" rows="3" placeholder="その他の内容をご記入ください"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">その他、備考欄</label>
+                    <div class="form-input-wrap">
+                        <textarea name="message" rows="4" placeholder="その他、お伝え事項がありましたらご記入ください"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-submit-group">
+                    <div class="privacy-notice">
+                        <label>
+                            <input type="checkbox" id="privacy-checkbox"> 
+                            <a href="/privacy-policy" class="privacy-link" target="_blank">プライバシーポリシー</a>に同意する
+                        </label>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit" id="submit-btn" class="submit-btn" disabled>確認画面へ進む</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; HIATARI Inc.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
