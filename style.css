@@ -705,7 +705,7 @@ input[type="checkbox"]:checked::after {
     .big-menu-link {
         font-family: var(--font-en);
         font-size: 30px;
-        font-weight: 100;
+        font-weight: 300;
         color: var(--color-main);
         text-decoration: none;
         letter-spacing: 0.04em;
@@ -778,6 +778,14 @@ input[type="checkbox"]:checked::after {
         width: 150px;
         height: auto;
         display: block;
+    }
+
+    /* SPファーストビュー：指でなぞる操作とスクロールの競合を防ぐ
+       FV上のタッチではブラウザのスクロール/バウンス/引っ張り更新を無効化
+       （タップ・touchmoveイベントは通常通り発火するので、ボタンと画像アニメは動作する） */
+    .fv-section {
+        touch-action: none;
+        overscroll-behavior: none;
     }
 }
 

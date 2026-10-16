@@ -106,10 +106,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             createTrailImage(e.clientX, e.clientY);
         });
 
-        // スマホでのドラッグ/スワイプ時に、画面の意図しないスクロールダウンを防ぐ
+        // スマホ（SP版）のファーストビュー内でのみ、タッチによる不要なスクロールダウンを防ぐ
         fvSection.addEventListener("touchmove", (e) => {
-            const touch = e.touches[0];
-            createTrailImage(touch.clientX, touch.clientY);
+            if (window.innerWidth <= 1023) {
+                const touch = e.touches[0];
+                createTrailImage(touch.clientX, touch.clientY);
+            }
         }, { passive: true });
     }
 
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (scrollBtn && heroSection) {
         scrollBtn.addEventListener("click", () => {
-            isUnlocked = true; // ロックを解除
+            isUnlocked = true; // ロック解除
             heroSection.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
@@ -128,42 +130,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // ファーストビュー表示中で、ボタンがまだ押されていない時は下に抜けるスクロールをブロックする
+    // PC版には干渉せず、スマホ版（1023px以下）のファーストビューのみスクロールを制限
     window.addEventListener("wheel", (e) => {
+        if (window.innerWidth > 1023) return; // PC版は除外
+
         const scrollY = window.scrollY;
         const windowHeight = window.innerHeight;
 
+        // トップ付近にいるかつボタンが押されていない場合は下方向へのスクロールをブロック
         if (!isUnlocked && scrollY < windowHeight / 2 && e.deltaY > 0) {
-            e.preventDefault(); // 下方向へのスクロールを無効化
-        } else if (scrollY < windowHeight / 2 && e.deltaY > 0 && !window.isAnimating) {
             e.preventDefault();
-            window.isAnimating = true;
-
-            if (heroSection) {
-                heroSection.scrollIntoView({ behavior: "smooth" });
-            }
-
-            setTimeout(() => {
-                window.isAnimating = false;
-            }, 800);
         }
     }, { passive: false });
 
-    // タッチデバイス（SP版）でのスワイプによる自動スクロールを防ぐ制御
-    let touchStartY = 0;
+    // スマホ版：ファーストビュー内でのなぞり操作では画面をスクロールさせない
+    // （基本はCSSの touch-action: none で制御。ここは念のための二重ガード）
     if (fvSection) {
-        fvSection.addEventListener("touchstart", (e) => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
         fvSection.addEventListener("touchmove", (e) => {
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const currentY = e.touches[0].clientY;
-            const deltaY = touchStartY - currentY; // 上方向へスワイプ（下へスクロールしようとする動き）
+            if (window.innerWidth > 1023) return; // PC版は除外
 
-            if (!isUnlocked && scrollY < windowHeight / 2 && deltaY > 10) {
-                e.preventDefault(); // ボタンが押されるまではスワイプダウンによる次セクション移動をブロック
+            // ボタンが押されるまでは、スワイプの方向を問わず次セクションへのスクロールをブロック
+            if (!isUnlocked && window.scrollY < window.innerHeight / 2 && e.cancelable) {
+                e.preventDefault();
             }
         }, { passive: false });
     }
@@ -173,29 +161,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         const currentScrollY = window.scrollY;
         const windowHeight = window.innerHeight;
 
-        // ヒーローセクション以降に達したらロックフラグをリセット等必要に応じて
-        if (currentScrollY >= windowHeight * 0.5) {
+        // ★重要：ユーザーがページを一番上（ファーストビュー）に戻してきたら、ロックを自動で再有効化する
+        if (currentScrollY < 20) {
+            isUnlocked = false;
+        } else if (currentScrollY >= windowHeight * 0.5) {
             isUnlocked = true;
         }
 
-        if (currentScrollY > windowHeight * 0.5) {
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                const header = document.querySelector(".global-header");
-                if (header) {
-                    header.classList.remove("is-visible");
-                    header.classList.add("is-hidden");
+        // 以下、ヘッダーの表示・非表示切り替え等の既存処理
+        if (window.innerWidth <= 1023) {
+            if (currentScrollY > windowHeight * 0.5) {
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    const header = document.querySelector(".global-header");
+                    if (header) {
+                        header.classList.remove("is-visible");
+                        header.classList.add("is-hidden");
+                    }
+                } else {
+                    const header = document.querySelector(".global-header");
+                    if (header) {
+                        header.classList.remove("is-hidden");
+                        header.classList.add("is-visible");
+                    }
                 }
             } else {
                 const header = document.querySelector(".global-header");
                 if (header) {
-                    header.classList.remove("is-hidden");
-                    header.classList.add("is-visible");
+                    header.classList.remove("is-visible", "is-hidden");
                 }
-            }
-        } else {
-            const header = document.querySelector(".global-header");
-            if (header) {
-                header.classList.remove("is-visible", "is-hidden");
             }
         }
 
