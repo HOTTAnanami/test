@@ -1,14 +1,49 @@
-document.addEventListener("DOMContentLoaded", async () => {
+// ヘッダーの表示・非表示を切り替える（PC版・スマホ版で共通の動き）
+//  - ファーストビュー内（画面の半分までのスクロール）：非表示
+//  - それ以降：下スクロール中は隠れ、上スクロールで上からスライドして表示
+//  ※ スライドの速さ・イージングはCSS（.global-header の transition）で共通指定
+let lastScrollY = window.scrollY;
+function updateHeader() {
+    const header = document.querySelector(".global-header");
+    if (!header) return;
+
+    const currentScrollY = window.scrollY;
+    const isPastFirstView = currentScrollY > window.innerHeight * 0.5;
+    const isScrollingDown = currentScrollY > lastScrollY && currentScrollY > 100;
+    const shouldHide = isPastFirstView && isScrollingDown;
+
+    if (!isPastFirstView) {
+        header.classList.remove("is-visible", "is-hidden");
+    } else if (shouldHide) {
+        header.classList.remove("is-visible");
+        header.classList.add("is-hidden");
+    } else {
+        header.classList.remove("is-hidden");
+        header.classList.add("is-visible");
+    }
+
+    lastScrollY = currentScrollY;
+}
+
+// 共通ヘッダーを読み込んでメニューを初期化する
+async function loadHeader() {
+    const headerInclude = document.getElementById("header-include");
+    if (!headerInclude) return;
+
     try {
         const response = await fetch("header.html");
         if (response.ok) {
-            const html = await response.text();
-            document.getElementById("header-include").innerHTML = html;
+            headerInclude.innerHTML = await response.text();
             initHeaderMenu();
+            updateHeader();
         }
     } catch (error) {
         console.error("ヘッダーの読み込みに失敗しました:", error);
     }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadHeader();
 
     const introLogo = document.getElementById("intro-logo");
     const originalImages = [];
@@ -21,16 +56,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    let imagePool = [];
-    function refreshImagePool() {
-        imagePool = [...originalImages];
-        for (let i = imagePool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [imagePool[i], imagePool[j]] = [imagePool[j], imagePool[i]];
-        }
-    }
-    refreshImagePool();
-
     const container = document.getElementById("image-container");
     const fvSection = document.getElementById("fv");
     let lastX = 0;
@@ -42,8 +67,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function createTrailImage(x, y) {
         if (!fvSection) return;
-        const heroRect = fvSection.getBoundingClientRect();
-        if (y > heroRect.bottom) return;
+        const fvRect = fvSection.getBoundingClientRect();
+        if (y > fvRect.bottom) return;
 
         if (isFirstMove) {
             lastX = x;
@@ -82,7 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             img.style.left = `${x}px`;
             img.style.top = `${y}px`;
-            img.style.animationDelay = `0s`;
             img.style.animationDuration = `${(5.8 + Math.random() * 3.5).toFixed(2)}s`;
 
             container.appendChild(img);
@@ -106,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             createTrailImage(e.clientX, e.clientY);
         });
 
-        // スマホ（SP版）のファーストビュー内でのみ、タッチによる不要なスクロールダウンを防ぐ
+        // スマホ（SP版）：指でなぞった位置にも画像を表示する
         fvSection.addEventListener("touchmove", (e) => {
             if (window.innerWidth <= 1023) {
                 const touch = e.touches[0];
@@ -156,7 +180,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, { passive: false });
     }
 
-    let lastScrollY = window.scrollY;
     window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
         const windowHeight = window.innerHeight;
@@ -168,32 +191,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             isUnlocked = true;
         }
 
-        // 以下、ヘッダーの表示・非表示切り替え等の既存処理
-        if (window.innerWidth <= 1023) {
-            if (currentScrollY > windowHeight * 0.5) {
-                if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                    const header = document.querySelector(".global-header");
-                    if (header) {
-                        header.classList.remove("is-visible");
-                        header.classList.add("is-hidden");
-                    }
-                } else {
-                    const header = document.querySelector(".global-header");
-                    if (header) {
-                        header.classList.remove("is-hidden");
-                        header.classList.add("is-visible");
-                    }
-                }
-            } else {
-                const header = document.querySelector(".global-header");
-                if (header) {
-                    header.classList.remove("is-visible", "is-hidden");
-                }
-            }
-        }
-
-        lastScrollY = currentScrollY;
+        updateHeader();
     });
+
+    // 画面サイズが変わったとき（ウィンドウ幅変更、端末の回転など）にも反映
+    window.addEventListener("resize", updateHeader);
 
     const sections = document.querySelectorAll(".section");
     const observerOptions = {
@@ -252,7 +254,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     requiredInputs.forEach(input => input.addEventListener("input", validateForm));
     reqCheckboxes.forEach(cb => cb.addEventListener("change", validateForm));
-    if (privacyCheckbox) privacyCheckbox.addEventListener("click", validateForm);
+    if (privacyCheckbox) privacyCheckbox.addEventListener("change", validateForm);
 
     validateForm();
 
@@ -289,9 +291,18 @@ function initHeaderMenu() {
     const bigMenu = document.getElementById("big-menu");
 
     if (hamburgerBtn && bigMenu) {
+        hamburgerBtn.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                hamburgerBtn.click();
+            }
+        });
+
         hamburgerBtn.addEventListener("click", () => {
-            hamburgerBtn.classList.toggle("active");
-            bigMenu.classList.toggle("is-active");
+            const isOpen = hamburgerBtn.classList.toggle("active");
+            bigMenu.classList.toggle("is-active", isOpen);
+            hamburgerBtn.setAttribute("aria-expanded", String(isOpen));
+            hamburgerBtn.setAttribute("aria-label", isOpen ? "メニューを閉じる" : "メニューを開く");
         });
     }
 
@@ -303,6 +314,8 @@ function initHeaderMenu() {
             if (hamburgerBtn && bigMenu) {
                 hamburgerBtn.classList.remove("active");
                 bigMenu.classList.remove("is-active");
+                hamburgerBtn.setAttribute("aria-expanded", "false");
+                hamburgerBtn.setAttribute("aria-label", "メニューを開く");
             }
 
             if (href.startsWith("#")) {
@@ -317,7 +330,7 @@ function initHeaderMenu() {
                 const [path, hash] = href.split("#");
                 const currentPath = window.location.pathname.split("/").pop();
                 
-                if (currentPath === path || currentPath === "" && path === "index.html") {
+                if (currentPath === path || (currentPath === "" && path === "index.html")) {
                     e.preventDefault();
                     const targetElement = document.querySelector("#" + hash);
                     if (targetElement) {
